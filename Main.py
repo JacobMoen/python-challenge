@@ -2,58 +2,57 @@
 import os
 import csv
 
-# creating a file path for the csv
-csvpath = os.path.join("PyBank", "Resources", "budget_data.csv")
-
-# exporting the results to a csv
-outputpath = os.path.join("PyBank", "Analysis", "Budget_Analysis.txt")
-
 # assigning variables
-totalmonths = 0
-totalnet = 0
-changelist = []
-monthofchangelist = []
-maxincrease = ["", 0]
-maxdecrease = ["", 9999999999]
+candidates = {}
+break_line = "------------------------------"
+
+# creating a file path for the csv
+csvpath = os.path.join("PyPoll", "Resources", "election_data.csv")
+
+# output results to text file
+output_result = os.path.join("PyPoll", "analysis", "election_results.txt")
+
+# open and read the csv file to get candidates
+with open(csvpath) as csvfile:
+    reader = csv.reader(csvfile, delimiter = ",")
+    header = next(reader)
+    total_vote = 0
+    for row in reader:
+        total_vote = total_vote + 1
+        name = row[2]
+        if name in candidates:
+            candidates[name] = candidates[name] + 1
+        else:
+            candidates[name] = 1
+    
+candidates["Charles Percent"] = round((candidates["Charles"]/total_vote) * 100, 2)
+candidates["Diana Percent"] = round((candidates["Diana"]/total_vote) * 100, 2)
+candidates["Raymon Percent"] = round((candidates["Raymon"]/total_vote) * 100, 2)
+
+# calculate the winner
+cand_winner = max(candidates, key=candidates.get)
+
+# print out results
+print("Election Results")
+print(break_line)
+print("Total Vote: " + str(total_vote))
+print(break_line)
+print("Charles: " + str(candidates["Charles Percent"]) + "% " + str(candidates["Charles"])) 
+print("Diana: " + str(candidates["Diana Percent"]) + "% " + str(candidates["Diana"]))
+print("Raymon: " + str(candidates["Raymon Percent"]) + "% " + str(candidates["Raymon"]))
+print(break_line)
+print("Winner: " + str(cand_winner))
+print(break_line)
 
 # open and read the csv file
-with open(csvpath) as csvfile:
-    reader = csv.reader(csvfile)
-    # variables for For loop
-    header = next(reader)
-    firstrow = next(reader)
-    totalmonths = totalmonths + 1
-    totalnet = totalnet + int(firstrow[1])
-    prevnet = int(firstrow[1])
-
-    for row in reader:
-        totalmonths = totalmonths + 1
-        totalnet = totalnet + int(row[1])
-        netchange = int(row[1]) - prevnet
-        prevnet = int(row[1])
-        changelist.append(netchange)
-        monthofchangelist.append(row[0])
-
-        if netchange > maxincrease[1]:
-            maxincrease[1] = netchange
-            maxincrease[0] = row[0]
-        if netchange < maxdecrease[1]:
-            maxdecrease[1] = netchange
-            maxdecrease[0] = row[0]  
-
-monthly_avg = sum(changelist)/len(changelist)
-
-# output results
-output = f"""
-Financial Analysis
-----------------------------
-Total Months: {totalmonths}
-Total: ${totalnet}
-Average Change: ${monthly_avg:.2f}
-Greatest Increase in Profits: {maxincrease[0]} (${maxincrease[1]})
-Greatest Decrease in Profits: {maxdecrease[0]} (${maxdecrease[1]})
-"""
-print(output)
-
-with open(outputpath, "w") as file:
-    file.write(output)
+with open(output_result, "w") as txt_file:
+    txt_file.write("Election Results" + "\n")
+    txt_file.write(break_line + "\n")
+    txt_file.write("Total Vote: " + str(total_vote) + "\n")
+    txt_file.write(break_line + "\n")
+    txt_file.write("Charles: " + str(candidates["Charles Percent"]) + "% " + str(candidates["Charles"]) + "\n") 
+    txt_file.write("Diana: " + str(candidates["Diana Percent"]) + "% " + str(candidates["Diana"]) + "\n")
+    txt_file.write("Raymon: " + str(candidates["Raymon Percent"]) + "% " + str(candidates["Raymon"]) + "\n")
+    txt_file.write(break_line + "\n")
+    txt_file.write("Winner: " + str(cand_winner) + "\n")
+    txt_file.write(break_line + "\n")
