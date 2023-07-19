@@ -1,3 +1,4 @@
+# Thank you to my tutor Sharon Colson for helping me apply these concepts
 # Add dependencies
 import os
 import csv
