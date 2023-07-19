@@ -1,6 +1,6 @@
 # python-challenge
 
-- Thank you to Sharon Colson for helping me apply these concepts
+- Thank you to my tutor Sharon Colson for helping me apply these concepts
 
 PyBank Instructions
 In this Challenge, you are tasked with creating a Python script to analyze the financial records of your company. You will be given a financial dataset called budget_data.csv. The dataset is composed of two columns: "Date" and "Profit/Losses".
